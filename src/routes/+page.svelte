@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { Heading, Input, Label, Button, Select } from 'flowbite-svelte';
 
 	let eventName = $state('');
@@ -15,7 +16,7 @@
 		}
 	};
 
-	const handleKeyPress = (event: KeyboardEvent) => {
+	const handleKeyPressOnDishInput = (event: KeyboardEvent) => {
 		if (event.key === 'Enter') {
 			event.preventDefault();
 			addDish();
@@ -29,11 +30,17 @@
 	const handleSubmit = (event: SubmitEvent) => {
 		event.preventDefault();
 		// Handle form submission here
-		console.log({
+		console.log('TODO: Submit, ', {
 			eventName,
 			dishes,
 			votingSystem
 		});
+		goto('/event/123/invitation'); // Replace with actual event ID after creation
+	};
+
+	const handleSave = () => {
+		// Handle save action here
+		console.log('TODO: Event saved as draft');
 	};
 </script>
 
@@ -48,7 +55,11 @@
 		<Label class="mb-2">Dishes</Label>
 		<div class="space-y-2">
 			<div class="flex gap-2">
-				<Input placeholder="Add a dish" bind:value={newDish} onkeydown={handleKeyPress} />
+				<Input
+					placeholder="Add a dish"
+					bind:value={newDish}
+					onkeydown={handleKeyPressOnDishInput}
+				/>
 				<div>
 					<Button color="blue" onclick={addDish}>Add</Button>
 				</div>
@@ -79,11 +90,6 @@
 
 	<div class="flex gap-4">
 		<Button type="submit" class="flex-1" color="blue" disabled={!isFormValid}>Create Event</Button>
-		<Button
-			type="button"
-			class="flex-1"
-			color="dark"
-			onclick={() => handleSubmit(new SubmitEvent('submit'))}>Save Event</Button
-		>
+		<Button type="button" class="flex-1" color="dark" onclick={handleSave}>Save Event</Button>
 	</div>
 </form>
