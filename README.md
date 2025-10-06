@@ -1,17 +1,11 @@
-# sv
+## Env
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+You must have an .env file in the project directory.
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+For development set the below:
 
 ```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+API_HOST="localhost:8000"
 ```
 
 ## Developing
