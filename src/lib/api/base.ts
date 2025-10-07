@@ -1,22 +1,81 @@
-export class APIBase {
-	baseUrl = '/api';
+type ParseReturn = 'JSON' | false; // Add other parsing options as needed
 
-	get = async (endpoint: string) => {
-		const response = await fetch(this.baseUrl + endpoint);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
+export class APIError extends Error {
+	status?: number;
+	statusText?: string;
+
+	constructor(status?: number, statusText?: string, message?: string) {
+		super(message || `API Error: ${status} ${statusText}`);
+		this.status = status;
+		this.statusText = statusText;
+	}
+}
+
+type ResponseJSON = { [key: string]: unknown };
+
+export class BaseAPI {
+	private baseUrl: string = '/api';
+	endpoint: string = '';
+
+	get = async (
+		endpoint: string,
+		parseReturn: ParseReturn = 'JSON'
+	): Promise<ResponseJSON | Response | undefined> => {
+		let response = undefined;
+		try {
+			response = await fetch(this.baseUrl + this.endpoint + endpoint);
+		} catch (error) {
+			throw new APIError(response?.status, response?.statusText, (error as Error).message);
 		}
-		return response.json();
+
+		if (response?.ok && parseReturn) {
+			switch (parseReturn) {
+				case 'JSON':
+					return response.json();
+				default:
+					return response;
+			}
+		}
+
+		return undefined;
 	};
 
-	post = async (endpoint: string, json: unknown) => {
-		const response = await fetch(this.baseUrl + endpoint, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(json)
-		});
-		return response.json();
+	post = async (
+		endpoint: string,
+		data: unknown,
+		parseReturn: ParseReturn = 'JSON'
+	): Promise<ResponseJSON | Response | undefined> => {
+		let response = undefined;
+		try {
+			response = await fetch(this.baseUrl + this.endpoint + endpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+		} catch {
+			if (response !== undefined) {
+				return { status: response.status, statusText: response.statusText };
+			}
+		}
+
+		if (response?.ok && parseReturn) {
+			switch (parseReturn) {
+				case 'JSON':
+					return await response.json();
+				default:
+					return response;
+			}
+		} else {
+			let message: string | undefined = undefined;
+			try {
+				message = await response?.json();
+			} catch {
+				/* ignore */
+			}
+
+			throw new APIError(response?.status, response?.statusText, message);
+		}
 	};
 }
