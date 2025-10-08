@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { EventsAPI } from '$lib/api/events';
 	import { Heading, Input, Label, Button, Select } from 'flowbite-svelte';
 
 	let eventName = $state('');
 	let dishes: string[] = $state([]);
 	let newDish = $state('');
-	let votingSystem = $state('ranked');
+	let votingSystem: 'RC' | 'PL' = $state('RC');
 
 	const isFormValid = $derived(eventName.trim() !== '' && dishes.length > 0);
 
@@ -27,15 +28,18 @@
 		dishes = dishes.filter((_, i) => i !== index);
 	};
 
-	const handleSubmit = (event: SubmitEvent) => {
+	const handleSubmit = async (event: SubmitEvent) => {
 		event.preventDefault();
-		// Handle form submission here
-		console.log('TODO: Submit, ', {
-			eventName,
-			dishes,
-			votingSystem
+
+		const api = new EventsAPI();
+
+		const response = await api.createEvent({
+			name: eventName,
+			choices: dishes,
+			electoral_system: votingSystem
 		});
-		goto('/event/123/invitation'); // Replace with actual event ID after creation
+
+		goto(`/event/${response.id}/invitation`); // Replace with actual event ID after creation
 	};
 
 	const handleSave = () => {
@@ -82,9 +86,8 @@
 	<div>
 		<Label for="voting-system" class="mb-2">Voting System</Label>
 		<Select id="voting-system" bind:value={votingSystem}>
-			<option value="ranked">Ranked</option>
-			<option value="first-past-the-post">First Past The Post</option>
-			<option value="rating">Rating</option>
+			<option value="RC">Ranked</option>
+			<option value="PL">First Past The Post</option>
 		</Select>
 	</div>
 
