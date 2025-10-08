@@ -11,13 +11,15 @@ type EventResponseData = CreateEventRequestData & {
 };
 
 export class EventsAPI extends BaseAPI {
-	endpoint: string = '/events';
+	endpoint: string = '/event';
 
 	getEvent = async (id: number) => {
-		return this.get(`/events/${id}/`) as Promise<EventResponseData | undefined>;
+		return this.get(`/${id}/`) as Promise<EventResponseData>;
 	};
 
 	createEvent = async (data: CreateEventRequestData) => {
-		return this.post('/events/create', data) as Promise<EventResponseData | undefined>;
+		return { id: 123124124, ...data } as EventResponseData;
+		//TODO: uncomment when implemented
+		//return this.post('/create', data) as Promise<EventResponseData>;
 	};
 }

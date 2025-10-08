@@ -17,53 +17,14 @@ export class BaseAPI {
 	private baseUrl: string = '/api';
 	endpoint: string = '';
 
-	get = async (
-		endpoint: string,
-		parseReturn: ParseReturn = 'JSON'
-	): Promise<ResponseJSON | Response | undefined> => {
-		let response = undefined;
-		try {
-			response = await fetch(this.baseUrl + this.endpoint + endpoint);
-		} catch (error) {
-			throw new APIError(response?.status, response?.statusText, (error as Error).message);
-		}
-
-		if (response?.ok && parseReturn) {
+	parseResponse = async (
+		response: Response,
+		parseReturn: ParseReturn
+	): Promise<ResponseJSON | Response> => {
+		if (response.ok && parseReturn) {
 			switch (parseReturn) {
 				case 'JSON':
 					return response.json();
-				default:
-					return response;
-			}
-		}
-
-		return undefined;
-	};
-
-	post = async (
-		endpoint: string,
-		data: unknown,
-		parseReturn: ParseReturn = 'JSON'
-	): Promise<ResponseJSON | Response | undefined> => {
-		let response = undefined;
-		try {
-			response = await fetch(this.baseUrl + this.endpoint + endpoint, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(data)
-			});
-		} catch {
-			if (response !== undefined) {
-				return { status: response.status, statusText: response.statusText };
-			}
-		}
-
-		if (response?.ok && parseReturn) {
-			switch (parseReturn) {
-				case 'JSON':
-					return await response.json();
 				default:
 					return response;
 			}
@@ -75,7 +36,42 @@ export class BaseAPI {
 				/* ignore */
 			}
 
-			throw new APIError(response?.status, response?.statusText, message);
+			throw new APIError(response.status, response.statusText, message);
 		}
+	};
+
+	get = async (
+		endpoint: string,
+		parseReturn: ParseReturn = 'JSON'
+	): Promise<ResponseJSON | Response> => {
+		let response = undefined;
+		try {
+			response = await fetch(this.baseUrl + this.endpoint + endpoint);
+		} catch (error) {
+			throw new APIError(response?.status, response?.statusText, (error as Error).message);
+		}
+
+		return this.parseResponse(response, parseReturn);
+	};
+
+	post = async (
+		endpoint: string,
+		data: unknown,
+		parseReturn: ParseReturn = 'JSON'
+	): Promise<ResponseJSON | Response> => {
+		let response = undefined;
+		try {
+			response = await fetch(this.baseUrl + this.endpoint + endpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+		} catch (error) {
+			throw new APIError(response?.status, response?.statusText, (error as Error).message);
+		}
+
+		return this.parseResponse(response, parseReturn);
 	};
 }
