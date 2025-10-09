@@ -1,25 +1,45 @@
 import { BaseAPI } from './base';
 
-type CreateEventRequestData = {
+export type CreateEventRequestData = {
 	name: string;
 	choices: string[];
 	electoral_system: 'RC' | 'PL';
 };
 
-type EventResponseData = CreateEventRequestData & {
-	id: number;
+export type EventResponseData = CreateEventRequestData & {
+	id: string;
+};
+
+export type EventBallotResponseData = {
+	voter_name: string;
+	vote: unknown;
+	submitted: undefined | string;
 };
 
 export class EventsAPI extends BaseAPI {
 	endpoint: string = '/event';
 
-	getEvent = async (id: number) => {
-		return this.get(`/${id}/`) as Promise<EventResponseData>;
+	getEvent = async (id: string) => {
+		return {
+			id,
+			name: 'Sample Event',
+			choices: ['Option 1', 'Option 2'],
+			electoral_system: 'RC'
+		} as EventResponseData;
+		//TODO: Replace with actual API call
+		//return this.get(`/${id}/`) as Promise<EventResponseData>;
 	};
 
 	createEvent = async (data: CreateEventRequestData) => {
-		return { id: 123124124, ...data } as EventResponseData;
+		return { id: 'asd123124124', ...data } as EventResponseData;
 		//TODO: uncomment when implemented
 		//return this.post('/create', data) as Promise<EventResponseData>;
+	};
+
+	getBallots = async (eventID: string) => {
+		console.log(eventID);
+		return [{ voter_name: 'John Doe' }, { voter_name: 'Jane Doe' }] as EventBallotResponseData[];
+		//TODO: uncomment when implemented
+		//return this.get(`/${eventID}/votes/`) as Promise<EventBallotResponseData[]>;
 	};
 }
