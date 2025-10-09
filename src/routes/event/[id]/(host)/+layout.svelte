@@ -7,7 +7,6 @@
 		ExclamationCircleOutline
 	} from 'flowbite-svelte-icons';
 	import { page } from '$app/state';
-	import type { EventBallotResponseData, EventResponseData } from '$lib/api/events';
 	import { setContext } from 'svelte';
 	import type { LayoutProps } from './$types';
 	import type { HostContext } from './type';

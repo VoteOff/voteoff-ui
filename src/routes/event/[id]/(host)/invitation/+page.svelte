@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { EventsAPI, type EventBallotResponseData } from '$lib/api/events';
+	import { EventsAPI } from '$lib/api/events';
 	import QRCode from '@castlenine/svelte-qrcode';
 	import { Button, Heading, Tooltip } from 'flowbite-svelte';
 	import {
@@ -66,7 +66,7 @@
 	</div>
 	{#if hostContext.ballots.length > 0}
 		<ul>
-			{#each hostContext.ballots as ballot}
+			{#each hostContext.ballots as ballot (ballot.id)}
 				<li>{ballot.voter_name}</li>
 			{/each}
 		</ul>

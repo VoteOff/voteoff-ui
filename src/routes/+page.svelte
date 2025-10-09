@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { EventsAPI } from '$lib/api/events';
 	import { Heading, Input, Label, Button, Select } from 'flowbite-svelte';
+	import { resolve } from '$app/paths';
 
 	let eventName = $state('');
 	let dishes: string[] = $state([]);
@@ -39,7 +40,7 @@
 			electoral_system: votingSystem
 		});
 
-		goto(`/event/${response.id}/invitation`); // Replace with actual event ID after creation
+		await goto(resolve(`/event/${response.id}/invitation/`)); // Replace with actual event ID after creation
 	};
 
 	const handleSave = () => {
@@ -70,7 +71,7 @@
 			</div>
 			{#if dishes.length > 0}
 				<ul class="space-y-2">
-					{#each dishes as dish, i}
+					{#each dishes as dish, i (dish + i)}
 						<li class="flex items-center justify-between rounded bg-gray-50 p-2">
 							<span>{dish}</span>
 							<div>
