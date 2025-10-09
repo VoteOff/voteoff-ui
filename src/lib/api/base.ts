@@ -11,7 +11,7 @@ export class APIError extends Error {
 	}
 }
 
-type ResponseJSON = { [key: string]: unknown };
+type ResponseJSON = { [key: string]: unknown } | [unknown];
 
 export class BaseAPI {
 	private baseUrl: string = '/api';
@@ -19,7 +19,7 @@ export class BaseAPI {
 
 	parseResponse = async (
 		response: Response,
-		parseReturn: ParseReturn
+		parseReturn: ParseReturn = 'JSON'
 	): Promise<ResponseJSON | Response> => {
 		if (response.ok && parseReturn) {
 			switch (parseReturn) {
