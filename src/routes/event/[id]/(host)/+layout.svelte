@@ -7,12 +7,19 @@
 		ExclamationCircleOutline
 	} from 'flowbite-svelte-icons';
 	import { page } from '$app/state';
+	import type { EventBallotResponseData, EventResponseData } from '$lib/api/events';
+	import { setContext } from 'svelte';
+	import type { LayoutProps } from './$types';
+	import type { HostContext } from './type';
 
-	let { children } = $props();
+	let { data, children }: LayoutProps = $props();
 
 	let activeUrl = $derived(page.url.pathname);
 	let eventID = $derived(page.params.id);
 	let confirmationModalOpen = $state(false);
+	let hostContext: HostContext = $state({ ...data });
+
+	setContext('host-context', hostContext);
 
 	const onCloseEvent = () => {
 		console.log('TODO: Close Event');

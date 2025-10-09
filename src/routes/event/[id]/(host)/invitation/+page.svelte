@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { EventsAPI, type EventBallotResponseData } from '$lib/api/events';
 	import QRCode from '@castlenine/svelte-qrcode';
 	import { Button, Heading, Tooltip } from 'flowbite-svelte';
 	import {
@@ -7,9 +8,10 @@
 		ClipboardCleanOutline,
 		RefreshOutline
 	} from 'flowbite-svelte-icons';
-	import { onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
+	import type { HostContext } from '../type';
 
-	let registeredVoters: string[] = $state([]);
+	const hostContext: HostContext = getContext('host-context');
 
 	let shareURL: string = $derived(
 		page.url.protocol + '//' + page.url.host + '/event/' + page.params.id + '/voter'
@@ -24,15 +26,17 @@
 
 	let timeoutID: NodeJS.Timeout;
 
-	const getRegisteredVoters = async () => {
+	const getBallots = async () => {
 		//TODO: Replace with actual API call to fetch voters
-		registeredVoters.push('Alice');
+		if (!page.params.id) return;
+		const api = new EventsAPI();
+		hostContext.ballots = await api.getBallots(page.params.id);
 		clearTimeout(timeoutID);
-		timeoutID = setTimeout(getRegisteredVoters, 10000);
+		timeoutID = setTimeout(getBallots, 10000);
 	};
 
 	onMount(() => {
-		getRegisteredVoters();
+		getBallots();
 		return () => clearTimeout(timeoutID);
 	});
 </script>
@@ -56,14 +60,14 @@
 
 	<div class="flex items-baseline">
 		<Heading tag="h3" class="mt-8">Registered Voters</Heading>
-		<Button class="ml-4" color="blue" onclick={getRegisteredVoters}>
+		<Button class="ml-4" color="blue" onclick={getBallots}>
 			<RefreshOutline aria-label="Refresh registered voters" />
 		</Button>
 	</div>
-	{#if registeredVoters.length > 0}
+	{#if hostContext.ballots.length > 0}
 		<ul>
-			{#each registeredVoters as voter}
-				<li>{voter}</li>
+			{#each hostContext.ballots as ballot}
+				<li>{ballot.voter_name}</li>
 			{/each}
 		</ul>
 	{:else}
