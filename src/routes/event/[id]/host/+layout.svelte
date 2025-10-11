@@ -10,6 +10,9 @@
 	import { setContext } from 'svelte';
 	import type { LayoutProps } from './$types';
 	import type { HostContext } from './type';
+	import { EventsAPI } from '$lib/api/events';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
 	let { data, children }: LayoutProps = $props();
 
@@ -20,8 +23,13 @@
 
 	setContext('host-context', hostContext);
 
-	const onCloseEvent = () => {
-		console.log('TODO: Close Event');
+	const onCloseEvent = async () => {
+		if (eventID === undefined) return;
+
+		const api = new EventsAPI();
+		await api.closeEvent(eventID, localStorage.getItem('event_token') || '');
+
+		goto(resolve(`/event/${eventID}/host/results/`));
 	};
 </script>
 
@@ -30,10 +38,10 @@
 </div>
 
 <BottomNav {activeUrl} navType="application" classes={{ inner: 'grid-cols-3' }}>
-	<BottomNavItem href="/event/{eventID}/invitation" btnName="Invitation" appBtnPosition="left">
+	<BottomNavItem href="/event/{eventID}/host/invitation" btnName="Invitation" appBtnPosition="left">
 		<ShareNodesOutline class="h-6 w-6" />
 	</BottomNavItem>
-	<BottomNavItem href="/event/{eventID}/status" btnName="Status" appBtnPosition="middle">
+	<BottomNavItem href="/event/{eventID}/host/status" btnName="Status" appBtnPosition="middle">
 		<GridOutline class="h-6 w-6" />
 	</BottomNavItem>
 	<BottomNavItem

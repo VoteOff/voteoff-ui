@@ -21,7 +21,7 @@ export class BaseAPI {
 		response: Response,
 		parseReturn: ParseReturn = 'JSON'
 	): Promise<ResponseJSON | Response> => {
-		if (response.ok && parseReturn) {
+		if (response.ok) {
 			switch (parseReturn) {
 				case 'JSON':
 					return response.json();

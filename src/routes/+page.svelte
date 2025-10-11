@@ -40,7 +40,9 @@
 			electoral_system: votingSystem
 		});
 
-		await goto(resolve(`/event/${response.id}/invitation/`)); // Replace with actual event ID after creation
+		localStorage.setItem('event_token', response.event_token);
+
+		await goto(resolve(`/event/${response.id}/host/invitation/`)); // Replace with actual event ID after creation
 	};
 
 	const handleSave = () => {

@@ -40,6 +40,14 @@ export class EventsAPI extends BaseAPI {
 		return this.post('/create', data) as Promise<EventCreateResponseData>;
 	};
 
+	closeEvent = async (eventID: string, token: string) => {
+		return this.post(`/${eventID}/close`, { token }, false);
+	};
+
+	openEvent = async (eventID: string, token: string) => {
+		return this.post(`/${eventID}/open`, { token }, false);
+	};
+
 	getBallots = async (/*TODO: Uncomment. eventID: string*/) => {
 		return [
 			{ id: 0, voter_name: 'John Doe' },
