@@ -30,7 +30,7 @@
 		//TODO: Replace with actual API call to fetch voters
 		if (!page.params.id) return;
 		const api = new EventsAPI();
-		hostContext.ballots = await api.getBallots(page.params.id);
+		hostContext.ballots = await api.getBallots(/*TODO: Uncomment. page.params.id*/);
 		clearTimeout(timeoutID);
 		timeoutID = setTimeout(getBallots, 10000);
 	};
