@@ -4,14 +4,15 @@
 	import { resolve } from '$app/paths';
 	import { EventsAPI } from '$lib/api/events';
 	import { Button } from 'flowbite-svelte';
+	import { hostTokenStorage } from '$lib/token-util';
 
-	let eventID = $derived(page.params.id);
+	let eventID = $derived(Number(page.params.id));
 
 	const openEvent = async () => {
 		if (eventID === undefined) return;
 
 		const api = new EventsAPI();
-		await api.openEvent(eventID, localStorage.getItem('event_token') || '');
+		await api.openEvent(eventID, hostTokenStorage.getToken(eventID));
 
 		await goto(resolve(`/event/${eventID}/host/status/`));
 	};

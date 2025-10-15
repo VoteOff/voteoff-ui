@@ -13,11 +13,12 @@
 	import { EventsAPI } from '$lib/api/events';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { hostTokenStorage } from '$lib/token-util';
 
 	let { data, children }: LayoutProps = $props();
 
 	let activeUrl = $derived(page.url.pathname);
-	let eventID = $derived(page.params.id);
+	let eventID = $derived(Number(page.params.id));
 	let confirmationModalOpen = $state(false);
 	let hostContext: HostContext = $state({ ...data });
 
@@ -27,7 +28,7 @@
 		if (eventID === undefined) return;
 
 		const api = new EventsAPI();
-		await api.closeEvent(eventID, localStorage.getItem('event_token') || '');
+		await api.closeEvent(eventID, hostTokenStorage.getToken(eventID));
 
 		goto(resolve(`/event/${eventID}/host/results/`));
 	};

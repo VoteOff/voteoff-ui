@@ -6,13 +6,17 @@ export type EventCreateRequestData = {
 	electoral_system: 'RC' | 'PL';
 };
 
-export type EventCreateResponseData = {
-	id: string;
-	event_token: string;
+export type EventResponseData = {
+	id: number;
+	name: string;
+	choices: string[];
+	electoral_system: 'RC' | 'PL';
+	host_token: string;
+	share_token: string;
 };
 
-export type EventResponseData = EventCreateRequestData & {
-	id: string;
+export type EventCreateResponseData = EventResponseData & {
+	host_token: string;
 };
 
 export type EventBallotResponseData = {
@@ -25,7 +29,7 @@ export type EventBallotResponseData = {
 export class EventsAPI extends BaseAPI {
 	endpoint: string = '/vote/event';
 
-	getEvent = async (id: string) => {
+	getEvent = async (id: number) => {
 		return {
 			id,
 			name: 'Sample Event',
@@ -40,11 +44,11 @@ export class EventsAPI extends BaseAPI {
 		return this.post('/create', data) as Promise<EventCreateResponseData>;
 	};
 
-	closeEvent = async (eventID: string, token: string) => {
+	closeEvent = async (eventID: number, token: string) => {
 		return this.post(`/${eventID}/close`, { token }, false);
 	};
 
-	openEvent = async (eventID: string, token: string) => {
+	openEvent = async (eventID: number, token: string) => {
 		return this.post(`/${eventID}/open`, { token }, false);
 	};
 
