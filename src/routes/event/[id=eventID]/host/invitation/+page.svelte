@@ -14,7 +14,14 @@
 	const hostContext: HostContext = getContext('host-context');
 
 	let shareURL: string = $derived(
-		page.url.protocol + '//' + page.url.host + '/event/' + page.params.id + '/voter'
+		page.url.protocol +
+			'//' +
+			page.url.host +
+			'/register' +
+			'?e=' +
+			page.params.id +
+			'&s=' +
+			hostContext.event?.share_token
 	);
 
 	let copied = $state(false);

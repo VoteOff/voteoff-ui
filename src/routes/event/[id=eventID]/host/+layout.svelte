@@ -7,20 +7,19 @@
 		ExclamationCircleOutline
 	} from 'flowbite-svelte-icons';
 	import { page } from '$app/state';
-	import { setContext } from 'svelte';
-	import type { LayoutProps } from './$types';
+	import { onMount, setContext } from 'svelte';
 	import type { HostContext } from './type';
 	import { EventsAPI } from '$lib/api/events';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { hostTokenStorage } from '$lib/token-util';
 
-	let { data, children }: LayoutProps = $props();
+	let { children } = $props();
 
 	let activeUrl = $derived(page.url.pathname);
 	let eventID = $derived(Number(page.params.id));
 	let confirmationModalOpen = $state(false);
-	let hostContext: HostContext = $state({ ...data });
+	let hostContext: HostContext = $state({ event: null, ballots: [] });
 
 	setContext('host-context', hostContext);
 
@@ -32,6 +31,13 @@
 
 		goto(resolve(`/event/${eventID}/host/results/`));
 	};
+
+	onMount(async () => {
+		//Cannot use load function in layout, cannot access localStorage in load function
+		const api = new EventsAPI(fetch);
+		hostContext.event = await api.getEvent(eventID, hostTokenStorage.getToken(eventID));
+		hostContext.ballots = await api.getBallots(/*TODO: Remove comment. params.id*/);
+	});
 </script>
 
 <div class="pb-24">
