@@ -29,15 +29,10 @@ export type EventBallotResponseData = {
 export class EventsAPI extends BaseAPI {
 	endpoint: string = '/vote/event';
 
-	getEvent = async (id: number) => {
-		return {
-			id,
-			name: 'Sample Event',
-			choices: ['Option 1', 'Option 2'],
-			electoral_system: 'RC'
-		} as EventResponseData;
-		//TODO: Replace with actual API call
-		//return this.get(`/${id}/`) as Promise<EventResponseData>;
+	getEvent = async (id: number, token: string, isHost: boolean = true) => {
+		return this.get(
+			`/${id}?${isHost ? 'host' : 'share'}_token=${token}`
+		) as Promise<EventResponseData>;
 	};
 
 	createEvent = async (data: EventCreateRequestData) => {
@@ -59,5 +54,10 @@ export class EventsAPI extends BaseAPI {
 		] as EventBallotResponseData[];
 		//TODO: uncomment when implemented
 		//return this.get(`/${eventID}/votes/`) as Promise<EventBallotResponseData[]>;
+	};
+
+	createBallot = async (eventID: number, name: string, shareToken: string) => {
+		this.post(`/${eventID}/create-ballot?voter_name=${name}&share_token=${shareToken}`, null);
+		return 'fake_token';
 	};
 }

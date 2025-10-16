@@ -16,6 +16,15 @@ type ResponseJSON = { [key: string]: unknown } | [unknown];
 export class BaseAPI {
 	private baseUrl: string = '/api';
 	endpoint: string = '';
+	fetch: typeof globalThis.fetch;
+
+	constructor(newFetch?: typeof globalThis.fetch) {
+		if (newFetch) {
+			this.fetch = newFetch;
+		} else {
+			this.fetch = fetch;
+		}
+	}
 
 	parseResponse = async (
 		response: Response,
@@ -46,7 +55,7 @@ export class BaseAPI {
 	): Promise<ResponseJSON | Response> => {
 		let response = undefined;
 		try {
-			response = await fetch(this.baseUrl + this.endpoint + endpoint);
+			response = await this.fetch(this.baseUrl + this.endpoint + endpoint);
 		} catch (error) {
 			throw new APIError(response?.status, response?.statusText, (error as Error).message);
 		}
@@ -61,7 +70,7 @@ export class BaseAPI {
 	): Promise<ResponseJSON | Response> => {
 		let response = undefined;
 		try {
-			response = await fetch(this.baseUrl + this.endpoint + endpoint, {
+			response = await this.fetch(this.baseUrl + this.endpoint + endpoint, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
