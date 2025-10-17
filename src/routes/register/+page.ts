@@ -6,13 +6,11 @@ export const load: PageLoad = async ({ url, fetch }) => {
 	const eventID = Number(url.searchParams.get('e'));
 	const shareToken = url.searchParams.get('s');
 
-	console.log(eventID, shareToken);
-
 	if (!shareToken || isNaN(eventID)) {
 		error(400, 'Invalid Share URL');
 	}
 	const api = new EventsAPI(fetch);
-	const event = await api.getEvent(eventID, shareToken, false);
+	const event = await api.getEvent(eventID, shareToken);
 
 	return event;
 };

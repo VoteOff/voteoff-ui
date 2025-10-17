@@ -8,7 +8,9 @@ import RankedChoiceResults from './components/ranked-choice/RankedChoiceResults.
 import PluralityVoting from './components/plurality/PluralityVoting.svelte';
 import PluralityResults from './components/plurality/PluralityResults.svelte';
 
-export const config: Record<string, { voting: Component; results: Component }> = {
-	RC: { voting: RankedChoiceVoting, results: RankedChoiceResults },
-	PL: { voting: PluralityVoting, results: PluralityResults }
-};
+const config: { id: string; label: string; voting: Component; results: Component }[] = [
+	{ id: 'RC', label: 'Ranked Choice', voting: RankedChoiceVoting, results: RankedChoiceResults },
+	{ id: 'PL', label: 'Plurality', voting: PluralityVoting, results: PluralityResults }
+] as const;
+
+export default config;
