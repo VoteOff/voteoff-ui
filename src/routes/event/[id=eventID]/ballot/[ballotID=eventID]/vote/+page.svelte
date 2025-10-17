@@ -23,7 +23,7 @@
 		{#if config}
 			<config.voting />
 		{:else}
-			Config Error
+			Config Error!
 		{/if}
 
 		<Button onclick={submitVote}>Vote</Button>
