@@ -35,8 +35,9 @@
 	onMount(async () => {
 		//Cannot use load function in layout, cannot access localStorage in load function
 		const api = new EventsAPI(fetch);
-		hostContext.event = await api.getEvent(eventID, hostTokenStorage.getToken(eventID));
-		hostContext.ballots = await api.getBallots(/*TODO: Remove comment. params.id*/);
+		const hostToken = hostTokenStorage.getToken(eventID);
+		hostContext.event = await api.getEvent(eventID, hostToken);
+		hostContext.ballots = await api.listBallots(eventID, hostToken);
 	});
 </script>
 

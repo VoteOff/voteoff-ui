@@ -10,9 +10,14 @@
 	} from 'flowbite-svelte-icons';
 	import { getContext, onMount } from 'svelte';
 	import type { HostContext } from '../type';
+	import { hostTokenStorage } from '$lib/token-util';
+
+	const REFRESH_DELAY = 3000;
 
 	const hostContext: HostContext = getContext('host-context');
-
+	const eventID: number = $derived(Number(page.params.id));
+	let hostToken: string = $state('');
+	let copied = $state(false);
 	let shareURL: string = $derived(
 		page.url.protocol +
 			'//' +
@@ -24,8 +29,6 @@
 			hostContext.event?.share_token
 	);
 
-	let copied = $state(false);
-
 	const onCopyClick = () => {
 		navigator.clipboard.writeText(shareURL);
 		copied = true;
@@ -34,15 +37,15 @@
 	let timeoutID: NodeJS.Timeout;
 
 	const getBallots = async () => {
-		//TODO: Replace with actual API call to fetch voters
 		if (!page.params.id) return;
 		const api = new EventsAPI();
-		hostContext.ballots = await api.getBallots(/*TODO: Uncomment. page.params.id*/);
+		hostContext.ballots = await api.listBallots(eventID, hostToken);
 		clearTimeout(timeoutID);
-		timeoutID = setTimeout(getBallots, 10000);
+		timeoutID = setTimeout(getBallots, REFRESH_DELAY);
 	};
 
 	onMount(() => {
+		hostToken = hostTokenStorage.getToken(eventID);
 		getBallots();
 		return () => clearTimeout(timeoutID);
 	});

@@ -22,8 +22,8 @@ export type EventCreateResponseData = EventResponseData & {
 export type EventBallotResponseData = {
 	id: number;
 	voter_name: string;
-	vote: unknown;
-	submitted: undefined | string;
+	created: string;
+	submitted: null | string;
 };
 
 export class EventsAPI extends BaseAPI {
@@ -47,13 +47,10 @@ export class EventsAPI extends BaseAPI {
 		return this.post(`/${eventID}/open`, { token }, false);
 	};
 
-	getBallots = async (/*TODO: Uncomment. eventID: string*/) => {
-		return [
-			{ id: 0, voter_name: 'John Doe' },
-			{ id: 1, voter_name: 'Jane Doe' }
-		] as EventBallotResponseData[];
-		//TODO: uncomment when implemented
-		//return this.get(`/${eventID}/votes/`) as Promise<EventBallotResponseData[]>;
+	listBallots = async (eventID: number, token: string) => {
+		return this.get(`/${eventID}/ballots?host_token=${token}`) as Promise<
+			EventBallotResponseData[]
+		>;
 	};
 
 	createBallot = async (eventID: number, name: string, shareToken: string) => {
