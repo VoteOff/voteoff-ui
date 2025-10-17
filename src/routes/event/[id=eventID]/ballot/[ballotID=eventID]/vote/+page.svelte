@@ -5,12 +5,12 @@
 	import votingSystems from '$lib/voting-system/config';
 	import type { BallotContext } from '../types';
 
-	const ballotID = $derived(Number(page.params.id));
+	const ballotID = $derived(Number(page.params.ballotID));
 	const ballotContext: BallotContext = getContext('ballot-data');
 
 	const submitVote = () => {
 		//TODO: Implement API.
-		console.log($state.snapshot(ballotContext.submission), ballotID);
+		console.log($state.snapshot(ballotContext), ballotID);
 	};
 </script>
 

@@ -10,7 +10,6 @@
 	const eventID = $derived(Number(page.params.id));
 	const ballotContext: BallotContext = $state({
 		event: null,
-		ballots: [],
 		submission: 'data'
 	});
 	setContext('ballot-data', ballotContext);
@@ -20,7 +19,6 @@
 		const token = voterTokenStorage.getToken(eventID);
 
 		ballotContext.event = await api.getEvent(eventID, token);
-		ballotContext.ballots = await api.listBallots(eventID, token);
 	});
 </script>
 
