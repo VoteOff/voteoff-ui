@@ -23,5 +23,3 @@
 		<ResultWrapper {eventID} votingSystemID={ballotContext.event.electoral_system} {token} />
 	{/if}
 </div>
-
-ballotContext.event = await api.getEvent(eventID, token);
