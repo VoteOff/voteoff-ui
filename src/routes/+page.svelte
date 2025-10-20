@@ -4,11 +4,12 @@
 	import { Heading, Input, Label, Button, Select } from 'flowbite-svelte';
 	import { resolve } from '$app/paths';
 	import { hostTokenStorage } from '$lib/token-util';
+	import votingSystems from '$lib/voting-system/config';
 
 	let eventName = $state('');
 	let dishes: string[] = $state([]);
 	let newDish = $state('');
-	let votingSystem: 'RC' | 'PL' = $state('RC');
+	let votingSystem: string = $state(votingSystems[0].id);
 
 	const isFormValid = $derived(eventName.trim() !== '' && dishes.length > 0);
 
@@ -89,8 +90,9 @@
 	<div>
 		<Label for="voting-system" class="mb-2">Voting System</Label>
 		<Select id="voting-system" bind:value={votingSystem}>
-			<option value="RC">Ranked</option>
-			<option value="PL">First Past The Post</option>
+			{#each votingSystems as config (config.id)}
+				<option value={config.id}>{config.label}</option>
+			{/each}
 		</Select>
 	</div>
 

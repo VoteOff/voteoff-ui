@@ -19,15 +19,16 @@
 		const api = new EventsAPI();
 		const response = await api.createBallot(data.id, voterName, data.share_token);
 
-		voterTokenStorage.saveToken(data.id, response); //TODO: Fix. Temp untill token is returned from createBallot.
+		voterTokenStorage.saveToken(data.id, response.ballot_token);
 
-		await goto(resolve(`/event/${data.id}/voter/`));
+		await goto(resolve(`/event/${data.id}/ballot/${response.ballot_id}/vote`));
 	};
 
 	onMount(() => {
-		if (voterTokenStorage.getToken(data.id)) {
-			goto(resolve(`/event/${data.id}/voter/`));
-		}
+		//TODO: Fix auto redirect.
+		/* if (voterTokenStorage.getToken(data.id)) {
+			goto(resolve(`/event/${data.id}/ballot/${response.ballot_id}/vote/`));
+		} */
 	});
 </script>
 

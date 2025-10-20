@@ -1,21 +1,26 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { resolve } from '$app/paths';
-	import { EventsAPI } from '$lib/api/events';
-	import { Button } from 'flowbite-svelte';
+	import { Heading } from 'flowbite-svelte';
 	import { hostTokenStorage } from '$lib/token-util';
+	import ResultWrapper from '$lib/ResultWrapper.svelte';
+	import { onMount } from 'svelte';
+	import { EventsAPI, type EventResponseData } from '$lib/api/events';
 
-	let eventID = $derived(Number(page.params.id));
+	const eventID = $derived(Number(page.params.id));
+	let event: EventResponseData | null = $state(null);
+	let token: string = $state('');
 
-	const openEvent = async () => {
-		if (eventID === undefined) return;
-
+	onMount(async () => {
 		const api = new EventsAPI();
-		await api.openEvent(eventID, hostTokenStorage.getToken(eventID));
+		token = hostTokenStorage.getToken(eventID);
 
-		await goto(resolve(`/event/${eventID}/host/status/`));
-	};
+		event = await api.getEvent(eventID, token);
+	});
 </script>
 
-All Results <Button onclick={openEvent}>Open Event</Button>
+<Heading tag="h2" class="my-8 text-center">Results</Heading>
+<div class="my-4 flex flex-col items-center gap-4">
+	{#if event}
+		<ResultWrapper {eventID} votingSystemID={event.electoral_system} {token} />
+	{/if}
+</div>
