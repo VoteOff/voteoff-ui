@@ -5,6 +5,7 @@
 	import { resolve } from '$app/paths';
 	import { hostTokenStorage } from '$lib/token-util';
 	import votingSystems from '$lib/voting-system/config';
+	import HCaptcha from '$lib/HCaptcha.svelte';
 
 	let eventName = $state('');
 	let dishes: string[] = $state([]);
@@ -100,4 +101,9 @@
 		<Button type="submit" class="flex-1" color="blue" disabled={!isFormValid}>Create Event</Button>
 		<Button type="button" class="flex-1" color="dark" onclick={handleSave}>Save Event</Button>
 	</div>
+	<HCaptcha
+		onsolve={(e) => {
+			console.log(e);
+		}}
+	/>
 </form>

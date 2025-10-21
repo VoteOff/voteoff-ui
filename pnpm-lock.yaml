@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@hcaptcha/types':
+        specifier: ^1.1.0
+        version: 1.1.0
     devDependencies:
       '@castlenine/svelte-qrcode':
         specifier: ^2.3.0
@@ -303,6 +307,9 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@hcaptcha/types@1.1.0':
+    resolution: {integrity: sha512-bR8W/2kgdCt2IaQU7AeRA4TAZbFuEyiDqUbTlLqCbZqp3GyzrAKthACDJ6WQ2K9IWBQCuA2fPj9ikfp98+bvSA==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1772,6 +1779,8 @@ snapshots:
       '@floating-ui/utils': 0.2.10
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@hcaptcha/types@1.1.0': {}
 
   '@humanfs/core@0.19.1': {}
 
