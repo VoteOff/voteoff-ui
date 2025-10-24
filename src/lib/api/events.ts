@@ -41,12 +41,12 @@ export class EventsAPI extends BaseAPI {
 		return this.post('/create', data) as Promise<EventCreateResponseData>;
 	};
 
-	closeEvent = async (eventID: number, token: string) => {
-		return this.post(`/${eventID}/close`, { token }, false);
+	closeEvent = async (eventID: number, host_token: string) => {
+		return this.post(`/${eventID}/close?host_token=${host_token}`);
 	};
 
-	openEvent = async (eventID: number, token: string) => {
-		return this.post(`/${eventID}/open`, { token }, false);
+	openEvent = async (eventID: number, host_token: string) => {
+		return this.post(`/${eventID}/open?host_token=${host_token}`);
 	};
 
 	listBallots = async (eventID: number, token: string) => {
@@ -55,8 +55,7 @@ export class EventsAPI extends BaseAPI {
 
 	createBallot = async (eventID: number, name: string, shareToken: string) => {
 		return this.post(
-			`/${eventID}/create-ballot?voter_name=${name}&share_token=${shareToken}`,
-			null
+			`/${eventID}/create-ballot?voter_name=${name}&share_token=${shareToken}`
 		) as Promise<BallotCreateResponseData>;
 	};
 }

@@ -1,4 +1,4 @@
-type ParseReturn = 'JSON' | false; // Add other parsing options as needed
+type ParseReturn = 'JSON'; // Add other parsing options as needed
 
 export class APIError extends Error {
 	status?: number;
@@ -65,7 +65,7 @@ export class BaseAPI {
 
 	post = async (
 		endpoint: string,
-		data: unknown,
+		data: unknown = null,
 		parseReturn: ParseReturn = 'JSON'
 	): Promise<ResponseJSON | Response> => {
 		let response = undefined;
