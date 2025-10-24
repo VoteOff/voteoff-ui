@@ -21,6 +21,7 @@ export type EventCreateResponseData = EventResponseData & {
 export type BallotResponseData = {
 	id: number;
 	voter_name: string;
+	vote: Record<string, unknown>;
 	created: string;
 	submitted: null | string;
 };
@@ -57,5 +58,13 @@ export class EventsAPI extends BaseAPI {
 		return this.post(
 			`/${eventID}/create-ballot?voter_name=${name}&share_token=${shareToken}`
 		) as Promise<BallotCreateResponseData>;
+	};
+}
+
+export class BallotAPI extends BaseAPI {
+	endpoint: string = '/vote/ballot';
+
+	submitBallot = async (ballotID: number, token: string, submission: unknown) => {
+		return this.post(`/${ballotID}/submit?token=${token}`, { vote: submission });
 	};
 }

@@ -3,14 +3,14 @@
 	import { EventsAPI } from '$lib/api/events';
 	import { voterTokenStorage } from '$lib/token-util';
 	import { onMount, setContext } from 'svelte';
-	import type { BallotContext } from './types';
+	import type { BallotContext } from '$lib/types';
 
 	const { children } = $props();
 
 	const eventID = $derived(Number(page.params.id));
 	const ballotContext: BallotContext = $state({
 		event: null,
-		submission: 'data'
+		submission: {}
 	});
 	setContext('ballot-data', ballotContext);
 

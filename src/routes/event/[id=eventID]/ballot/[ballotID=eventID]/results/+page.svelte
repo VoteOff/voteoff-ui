@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { Heading } from 'flowbite-svelte';
 	import { getContext } from 'svelte';
-	import type { BallotContext } from '../types';
+	import type { BallotContext } from '$lib/types';
 	import { voterTokenStorage } from '$lib/token-util';
 	import ResultWrapper from '$lib/ResultWrapper.svelte';
 
