@@ -1,10 +1,12 @@
 import type { HandleFetch } from '@sveltejs/kit';
-import { API_HOST } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	if (event.url.pathname.startsWith('/api')) {
-		request = new Request(`${event.url.protocol}://${API_HOST}${event.url.pathname}`, request);
+		request = new Request(
+			`${event.url.protocol}://${env.API_HOST ? env.API_HOST : 'localhost'}${event.url.pathname}`,
+			request
+		);
 	}
-	console.log('Fetch Request: ', request);
 	return await fetch(request);
 };
