@@ -3,14 +3,22 @@
 	import { Button, Heading } from 'flowbite-svelte';
 	import { getContext } from 'svelte';
 	import votingSystems from '$lib/voting-system/config';
-	import type { BallotContext } from '../types';
+	import type { BallotContext } from '$lib/types';
+	import { voterTokenStorage } from '$lib/token-util';
+	import { BallotAPI } from '$lib/api/events';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
+	const eventID = $derived(Number(page.params.id));
 	const ballotID = $derived(Number(page.params.ballotID));
 	const ballotContext: BallotContext = getContext('ballot-data');
 
-	const submitVote = () => {
-		//TODO: Implement API.
-		console.log($state.snapshot(ballotContext), ballotID);
+	const submitVote = async () => {
+		const ballotAPI = new BallotAPI();
+		const token = voterTokenStorage.getToken(eventID);
+
+		await ballotAPI.submitBallot(ballotID, token, ballotContext.submission);
+		goto(resolve(`/event/${eventID}/ballot/${ballotID}/results`), { replaceState: true });
 	};
 </script>
 
