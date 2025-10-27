@@ -45,7 +45,7 @@
 	{@render children?.()}
 </div>
 
-<BottomNav {activeUrl} navType="application" classes={{ inner: 'grid-cols-3' }}>
+<BottomNav {activeUrl} navType="card" classes={{ inner: 'grid-cols-3' }}>
 	<BottomNavItem href="/event/{eventID}/host/invitation" btnName="Invitation" appBtnPosition="left">
 		<ShareNodesOutline class="h-6 w-6" />
 	</BottomNavItem>
