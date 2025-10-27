@@ -40,7 +40,7 @@
 			let ballot = await api.getBallotFromToken(voterTokenStorage.getToken(data.id)!);
 
 			if (ballot) {
-				goto(resolve(`/event/${data.id}/ballot/${ballot.id}/vote/`));
+				await goto(resolve(`/event/${data.id}/ballot/${ballot.id}/vote/`));
 			}
 		}
 
