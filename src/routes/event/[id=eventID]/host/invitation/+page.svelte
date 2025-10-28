@@ -53,9 +53,9 @@
 
 <Heading tag="h2" class="my-8 text-center">Event Invitation</Heading>
 <div class="my-4 flex flex-col items-center gap-4">
-	{#key shareURL}
+	{#if hostContext.event}
 		<QRCode data={shareURL} />
-	{/key}
+	{/if}
 
 	<Button onclick={onCopyClick} class="flex cursor-pointer items-center gap-2">
 		{#if copied}
