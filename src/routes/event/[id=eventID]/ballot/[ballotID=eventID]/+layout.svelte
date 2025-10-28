@@ -3,22 +3,21 @@
 	import { EventsAPI } from '$lib/api/events';
 	import { voterTokenStorage } from '$lib/token-util';
 	import { onMount, setContext } from 'svelte';
-	import type { BallotContext } from '$lib/types';
+	import type { EventContext } from '$lib/types';
 
 	const { children } = $props();
 
 	const eventID = $derived(Number(page.params.id));
-	const ballotContext: BallotContext = $state({
-		event: null,
-		submission: {}
+	const eventContext: EventContext = $state({
+		event: null
 	});
-	setContext('ballot-data', ballotContext);
+	setContext('event-data', eventContext);
 
 	onMount(async () => {
 		const api = new EventsAPI();
 		const token = voterTokenStorage.getToken(eventID);
 
-		ballotContext.event = await api.getEvent(eventID, token);
+		eventContext.event = await api.getEvent(eventID, token);
 	});
 </script>
 
