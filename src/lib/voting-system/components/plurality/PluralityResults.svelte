@@ -16,7 +16,7 @@
 	);
 </script>
 
-{#if eventContext.event}
+{#if eventContext}
 	{#each votes as vote (vote.choice)}
 		<P class="my-2">
 			{vote.choice}: {vote.count}
