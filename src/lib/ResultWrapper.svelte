@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, onMount, setContext } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import { PUBLIC_RESULTS_REFRESH_DELAY } from '$env/static/public';
 	import votingSystems from '$lib/voting-system/config';
 	import { EventsAPI } from '$lib/api/events';
