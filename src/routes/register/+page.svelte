@@ -6,8 +6,6 @@
 	import { resolve } from '$app/paths';
 	import { voterTokenStorage } from '$lib/token-util';
 	import { onMount } from 'svelte';
-	import { error } from '@sveltejs/kit';
-	import { APIError } from '$lib/api/base';
 
 	const { data }: PageProps = $props();
 
