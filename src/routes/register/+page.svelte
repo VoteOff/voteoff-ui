@@ -73,7 +73,6 @@
 				placeholder="Enter your name"
 				bind:value={voterName}
 				oninput={() => {
-					console.log('here');
 					error = null;
 				}}
 				required
