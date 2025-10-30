@@ -2,20 +2,27 @@
 	import { dndzone } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import { getContext } from 'svelte';
+
 	const flipDurationMs = 200;
 
+	let eventContext: EventContext = getContext('event-data');
 	let ballotContext: BallotContext = getContext('ballot-data');
 
-	let items = ballotContext.event.choices.map((choiceStr) => {
+	let items = eventContext.event.choices.map((choiceStr) => {
 		return { id: choiceStr, title: choiceStr };
 	});
+
+	// Randomize order
+	items.sort(() => Math.random() - 0.5);
+
+	ballotContext.submission = items.map((i) => i.id);
+	ballotContext.submissionIsValid = true;
 
 	function handleSort(e) {
 		items = e.detail.items;
 	}
 
 	function handleFinalize(e) {
-	    console.log('handleFinalize()')
 		items = e.detail.items;
 		ballotContext.submission = items.map((i) => i.id);
 	}
