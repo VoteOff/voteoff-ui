@@ -14,23 +14,23 @@
 		let winner = null;
 		const rounds = [];
 
-		while (winner === null && rounds.length < 10) {
+		while (true) {
+			// Tally votes
+
 			const tallies = Object.fromEntries(choices.map((choice) => [choice, 0]));
+			tallies['Exhausted'] = 0;
 
 			ballots.forEach((b) => {
 				if (b.length > 0) {
 					tallies[b[0]]++;
+				} else {
+					tallies['Exhausted']++;
 				}
 			});
 
 			rounds.push(tallies);
 
-			const validVoteCount = Object.values(tallies).reduce(
-				(accumulator, currentValue) => accumulator + currentValue,
-				0
-			);
-
-			// Tally up round winner and loser (first choices only)
+			// Identify round winner and loser (first choices only)
 
 			let roundWinner = choices[0];
 			let roundLosers = [choices[0]];
@@ -47,12 +47,6 @@
 				}
 			});
 
-			let percents = Object.fromEntries(
-				Object.keys(tallies).map((k) => {
-					return [k, tallies[k] / validVoteCount];
-				})
-			);
-
 			// Purge roundLosers from the ballots (and the choice list)
 
 			ballots.forEach((b, i) => {
@@ -60,14 +54,19 @@
 			});
 			choices = choices.filter((c) => !roundLosers.includes(c));
 
-			// Check for an overall winner
+			// Check for a tie and/or an overall winner
+
+			if (choices.length === 0) {
+				return { roundData: rounds, overallWinner: '__TIE_FLAG__' };
+			}
+
+			// Winner only needs to take over 50% of non-exhausted votes
+		    const validVoteCount = ballots.length - tallies['Exhausted'];
 
 			if (tallies[roundWinner] / validVoteCount > 0.5) {
-				winner = roundWinner;
+				return { roundData: rounds, overallWinner: roundWinner };
 			}
 		}
-
-		return { roundData: rounds, overallWinner: winner };
 	};
 
 	let { roundData, overallWinner } = $derived.by(() => {
@@ -79,7 +78,13 @@
 	});
 </script>
 
-<h3>{overallWinner} wins!</h3>
+<h3>
+	{#if overallWinner === '__TIE_FLAG__'}
+		It's a tie!
+	{:else}
+		{overallWinner} wins!
+	{/if}
+</h3>
 
 <div class="rounds">
 	{#each roundData as voteCount, i}
