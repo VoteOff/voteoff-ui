@@ -4,7 +4,7 @@
 	import { hostTokenStorage } from '$lib/token-util';
 	import ResultWrapper from '$lib/ResultWrapper.svelte';
 	import { onMount, setContext } from 'svelte';
-	import { EventsAPI, type EventResponseData } from '$lib/api/events';
+	import { EventsAPI } from '$lib/api/events';
 	import type { EventContext } from '$lib/types';
 
 	const eventID = $derived(Number(page.params.id));
