@@ -21,7 +21,7 @@ export type EventCreateResponseData = EventResponseData & {
 export type BallotResponseData = {
 	id: number;
 	voter_name: string;
-	vote: Record<string, unknown>;
+	vote: Record<string, unknown> | unknown[];
 	created: string;
 	submitted: null | string;
 };
