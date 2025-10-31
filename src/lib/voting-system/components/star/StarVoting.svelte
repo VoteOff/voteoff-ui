@@ -43,7 +43,7 @@
 						>
 							<Star
 								iconIndex={index}
-								groupId={choice}
+								groupId={choice.trim().toLowerCase().replace(/\s+/g, '-')}
 								fillPercent={(ratingObj?.rating ?? 0) > index ? 100 : 0}
 								size={50}
 								ariaLabel={`Rate ${index + 1} star${index == 0 ? '' : 's'}`}
@@ -51,7 +51,7 @@
 						</button>
 					{/each}
 					<button
-						class="mx-4 flex cursor-pointer items-center justify-center p-2 pt-1.5 pb-0.5"
+						class="mx-4 flex cursor-pointer items-center justify-center p-2 pb-0.5 pt-1.5"
 						onclick={() => onRatingClick(choice, 0)}
 					>
 						<CloseOutline class="h-5 w-5 shrink-0" />
