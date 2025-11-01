@@ -202,7 +202,6 @@
 
 		return b.total - a.total;
 	}
-	$inspect(resultContext.ballots);
 </script>
 
 {#if eventContext}
