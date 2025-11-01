@@ -70,7 +70,7 @@
 
 {#if eventContext}
 	{#each totalRatings as vote, index (vote.choice)}
-		<div class="flex items-center gap-2">
+		<div class="flex flex-wrap items-center justify-center gap-2">
 			<P class="my-2">
 				{vote.choice} - {vote.total}
 			</P>
