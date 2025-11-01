@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { BallotContext, EventContext } from '$lib/types';
 	import { P, Star } from 'flowbite-svelte';
-	import { CloseOutline } from 'flowbite-svelte-icons';
+	import { RefreshOutline } from 'flowbite-svelte-icons';
 	import { getContext, onMount } from 'svelte';
 	import type { StarSubmission } from './types';
 
@@ -23,41 +23,48 @@
 		if (eventContext.event) {
 			ratings = eventContext.event.choices.map((choice) => ({ choice, rating: 0 }));
 		}
+		ballotContext.submission = ratings;
 		ballotContext.submissionIsValid = true;
 	});
 </script>
 
-<P class="text-center">Rate the dishes.</P>
+<P class="text-center">
+	Rate each item from 0-5 stars. You may rate multiple items with the same number of stars.
+</P>
 
 <div class="items-between flex-col">
 	{#if eventContext.event}
 		{#each eventContext.event.choices as choice (choice)}
 			{@const ratingObj = ratings.find((r) => r.choice === choice)}
-			<div class="my-2 flex w-full items-center justify-between gap-4">
-				<P size="lg" class="font-bold">{choice}</P>
-				<div class="flex items-center">
-					{#each Array(5), index (index)}
-						<button
-							class="flex cursor-pointer items-center justify-center"
-							onclick={() => onRatingClick(choice, index + 1)}
-						>
-							<Star
-								iconIndex={index}
-								groupId={choice.trim().toLowerCase().replace(/\s+/g, '-')}
-								fillPercent={(ratingObj?.rating ?? 0) > index ? 100 : 0}
-								size={50}
-								ariaLabel={`Rate ${index + 1} star${index == 0 ? '' : 's'}`}
-							/>
-						</button>
-					{/each}
-					<button
-						class="mx-4 flex cursor-pointer items-center justify-center p-2 pb-0.5 pt-1.5"
-						onclick={() => onRatingClick(choice, 0)}
-					>
-						<CloseOutline class="h-5 w-5 shrink-0" />
-					</button>
+			{#if ratingObj}
+				<div class="my-2 w-full flex-col items-center justify-between gap-4">
+					<P size="lg" class="font-bold">{choice}</P>
+					<div class="relative flex items-center">
+						{#if ratingObj.rating > 0}
+							<button
+								class="absolute right-full flex cursor-pointer items-center justify-center p-2 pb-0.5 pt-1.5"
+								onclick={() => onRatingClick(choice, 0)}
+							>
+								<RefreshOutline class="h-5 w-5 shrink-0" />
+							</button>
+						{/if}
+						{#each Array(5), index (index)}
+							<button
+								class="flex cursor-pointer items-center justify-center"
+								onclick={() => onRatingClick(choice, index + 1)}
+							>
+								<Star
+									iconIndex={index}
+									groupId={choice.trim().toLowerCase().replace(/\s+/g, '-')}
+									fillPercent={ratingObj.rating > index ? 100 : 0}
+									size={50}
+									ariaLabel={`Rate ${index + 1} star${index == 0 ? '' : 's'}`}
+								/>
+							</button>
+						{/each}
+					</div>
 				</div>
-			</div>
+			{/if}
 		{/each}
 	{/if}
 </div>
