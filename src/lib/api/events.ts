@@ -68,6 +68,10 @@ export class BallotAPI extends BaseAPI {
 		return this.post(`/${ballotID}/submit?token=${token}`, { vote: submission });
 	};
 
+	getBallot = async (ballotID: number, token: string) => {
+		return this.get(`/${ballotID}?token=${token}`) as Promise<BallotResponseData>;
+	};
+
 	getBallotFromToken = async (token: string) => {
 		return this.get(`/from-token?token=${token}`) as Promise<BallotResponseData>;
 	};

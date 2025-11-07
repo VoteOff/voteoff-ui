@@ -4,16 +4,19 @@
 	import votingSystems from '$lib/voting-system/config';
 	import type { BallotContext } from '$lib/types';
 	import { BallotAPI } from '$lib/api/events';
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
 	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
 
 	const {
-		eventID,
 		ballotID,
 		votingSystemID,
-		token
-	}: { eventID: number; ballotID: number; votingSystemID: string; token: string } = $props();
+		token,
+		onSubmitVote
+	}: {
+		ballotID: number;
+		votingSystemID: string;
+		token: string;
+		onSubmitVote: () => void;
+	} = $props();
 	const config = $derived(votingSystems.find((value) => value.id === votingSystemID));
 	const ballotContext: BallotContext = $state({
 		submission: {},
@@ -27,7 +30,7 @@
 		const ballotAPI = new BallotAPI();
 
 		await ballotAPI.submitBallot(ballotID, token, ballotContext.submission);
-		goto(resolve(`/event/${eventID}/ballot/${ballotID}/results`), { replaceState: true });
+		onSubmitVote();
 	};
 </script>
 
