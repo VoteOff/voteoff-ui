@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, setContext } from 'svelte';
-	import { PUBLIC_RESULTS_REFRESH_DELAY } from '$env/static/public';
+	import { RESULTS_REFRESH_DELAY } from './const';
 	import votingSystems from '$lib/voting-system/config';
 	import { EventsAPI } from '$lib/api/events';
 	import type { ResultContext } from './types';
@@ -21,7 +21,7 @@
 		const api = new EventsAPI();
 		resultContext.ballots = await api.listBallots(eventID, token);
 		clearTimeout(timeoutID);
-		timeoutID = setTimeout(getBallots, Number(PUBLIC_RESULTS_REFRESH_DELAY));
+		timeoutID = setTimeout(getBallots, RESULTS_REFRESH_DELAY);
 	}
 
 	onMount(() => {
