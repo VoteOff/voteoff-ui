@@ -1,10 +1,10 @@
 on:
   push:
     branches:
-      - "main"
+      - main
   pull_request:
     branches:
-      - "main"
+      - main
 
 jobs:
   lint-check:
@@ -26,5 +26,7 @@ jobs:
         run: pnpm install
       - name: Svelte Check
         run: pnpm check
+      - name: Format Check
+        run: pnpm format-check
       - name: Lint Check
         run: pnpm lint
