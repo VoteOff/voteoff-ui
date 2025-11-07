@@ -5,7 +5,7 @@
 	import { onMount, getContext, onDestroy } from 'svelte';
 	import { EventsAPI } from '$lib/api/events';
 	import type { HostContext } from '../type';
-	import { PUBLIC_RESULTS_REFRESH_DELAY } from '$env/static/public';
+	import { RESULTS_REFRESH_DELAY } from '$lib/const';
 
 	const eventID = $derived(Number(page.params.id));
 	let token: string = $state('');
@@ -22,7 +22,7 @@
 		const api = new EventsAPI();
 		hostContext.ballots = await api.listBallots(eventID, token);
 		clearTimeout(timeoutID);
-		timeoutID = setTimeout(getBallots, Number(PUBLIC_RESULTS_REFRESH_DELAY));
+		timeoutID = setTimeout(getBallots, RESULTS_REFRESH_DELAY);
 	};
 
 	onMount(async () => {
