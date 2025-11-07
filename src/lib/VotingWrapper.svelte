@@ -4,8 +4,6 @@
 	import votingSystems from '$lib/voting-system/config';
 	import type { BallotContext } from '$lib/types';
 	import { BallotAPI } from '$lib/api/events';
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
 	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
 
 	const {
