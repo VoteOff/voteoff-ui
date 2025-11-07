@@ -46,7 +46,7 @@
 </div>
 
 <BottomNav {activeUrl} navType="card" classes={{ inner: 'grid-cols-3' }}>
-	<BottomNavItem href="/event/{eventID}/host/invitation" btnName="Invitation" appBtnPosition="left">
+	<BottomNavItem href="/event/{eventID}/host/invitation" btnName="Invitation">
 		<ShareNodesOutline class="h-6 w-6" />
 	</BottomNavItem>
 	<BottomNavItem href="/event/{eventID}/host/status" btnName="Status" appBtnPosition="middle">
@@ -54,7 +54,6 @@
 	</BottomNavItem>
 	<BottomNavItem
 		btnName="Close Vote"
-		appBtnPosition="right"
 		class="cursor-pointer"
 		onclick={() => {
 			confirmationModalOpen = true;
